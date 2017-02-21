@@ -4,11 +4,6 @@ import {Dispatcher} from 'flux';
 
 
 class AppDispatcher extends Dispatcher {
-	constructor() {
-		super();
-		console.log("DIspatcher started");
-		console.log(this);
-	}
 
 	handleViewAction(action) {
 		const payload = {

@@ -12,12 +12,17 @@ const ActionTypes = Constants.ActionTypes;
 
 export default {
 	createTodo: function (payload) {
-		console.log(Dispatcher);
 		Dispatcher.handleViewAction({
 			type: ActionTypes.ADD_TODO,
 			data: payload
 		});
 		// here we would send to server
+	},
+	deleteTodo: function(payload) {
+		Dispatcher.handleViewAction({
+			type: ActionTypes.DELETE_TODO,
+			data: payload
+		});
 	}
 };
 

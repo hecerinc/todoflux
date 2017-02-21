@@ -13,9 +13,7 @@ class TaskList extends React.Component {
 	constructor() {
 		super();
 
-		// this.saveTask = this.saveTask.bind(this);
 		this.buildTaskItem = this.buildTaskItem.bind(this);
-		this.removeTask = this.removeTask.bind(this);
 		this._onChange = this._onChange.bind(this);
 
 		this.state = {
@@ -33,24 +31,7 @@ class TaskList extends React.Component {
 
 	buildTaskItem (key) { 
 		const task = this.state.tasks[key];
-		return (<TodoItem key={task.id} id={task.id} itemName={task.name} removeTask={this.removeTask} />);
-	}
-
-	// saveTask(task) {
-	// 	const tasks = {...this.state.tasks};
-	// 	const timestamp = Date.now();
-	// 	tasks['task-'+ timestamp] = {
-	// 		id: timestamp,
-	// 		name: task
-	// 	};
-	// 	this.setState({tasks});
-	// }
-
-	removeTask(taskId) {
-		const tasks = {...this.state.tasks};
-		const tid = 'task-' + taskId;
- 		delete tasks[tid];
-		this.setState({tasks});
+		return (<TodoItem key={task.id} id={task.id} itemName={task.name} />);
 	}
 
 	render() {

@@ -9,9 +9,6 @@ const CHANGE_EVENT = Constants.CHANGE_EVENT;
 // data in memory
 // var todos = {};
 
-// var TodoStore = 
-console.log(Dispatcher);
-
 function _generateTodo(text) {
 	return {
 		id: Counter.increment(),
@@ -37,6 +34,9 @@ class TodoStore extends EventEmitter {
 	// Another violation of constraint
 	_addTodo(todo) {
 		this._todos[todo.id] = todo;
+	}
+	_deleteTodo(id) {
+		delete this._todos[id];
 	}
 
 	// Event listeners
@@ -83,6 +83,8 @@ var dtoken = Dispatcher.register((payload) => {
 		break;
 		case ActionTypes.DELETE_TODO:
 			// yet another thing
+			const todo_id = action.data;
+			todoStore._deleteTodo(todo_id);
 			todoStore.emitChange();
 		break;
 		default:
