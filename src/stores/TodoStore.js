@@ -42,8 +42,8 @@ class TodoStore extends EventEmitter {
 	_deleteTodo(id) {
 		delete this._todos[id];
 	}
-	_completeTodo(id) {
-		this._todos[id].completed = true;
+	_toggleTodo(id) {
+		this._todos[id].completed = !this._todos[id].completed;
 	}
 
 	//        End constraint violations
@@ -97,9 +97,9 @@ var dtoken = Dispatcher.register((payload) => {
 			todoStore._deleteTodo(todo_id);
 			todoStore.emitChange();
 		break;
-		case ActionTypes.COMPLETE_TODO:
+		case ActionTypes.TOGGLE_TODO:
 			var todo_id = action.data;
-			todoStore._completeTodo(todo_id);
+			todoStore._toggleTodo(todo_id);
 			todoStore.emitChange();
 		break;
 		default:

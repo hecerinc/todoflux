@@ -8,15 +8,14 @@ class TodoItem extends React.Component {
 	}
 
 	checkChange(event) {
-		if(event.target.checked){
-			TodoActionCreator.completeTodo(this.props.id);
-		}
+		TodoActionCreator.toggleTodo(this.props.id);
 	}
 
 	render() {
+		const completed = this.props.completed?"checked":"";
 		return (
 			<li className="todo-item">
-				<input type="checkbox" name="is_completed" onChange={this.checkChange} />
+				<input type="checkbox" checked={completed} name="is_completed" onChange={this.checkChange} />
 				{this.props.itemName}
 				<button className="remove-btn" onClick={() => TodoActionCreator.deleteTodo(this.props.id) }>Remove</button>
 			</li>

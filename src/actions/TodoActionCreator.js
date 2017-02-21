@@ -24,9 +24,9 @@ export default {
 			data: payload
 		});
 	},
-	completeTodo: function(payload) {
+	toggleTodo: function(payload) {
 		Dispatcher.handleViewAction({
-			type: ActionTypes.COMPLETE_TODO,
+			type: ActionTypes.TOGGLE_TODO,
 			data: payload
 		});
 	}
