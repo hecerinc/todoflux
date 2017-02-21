@@ -1,39 +1,50 @@
 import React from 'react';
 import TodoItem from './TodoItem';
 import AddTaskForm from './AddTaskForm';
+import TodoStore from '../stores/TodoStore';
 
 // Supposed to maintain task list in this component
-
+function getTodosFromStore(){
+	return TodoStore.getAll();
+}
 
 class TaskList extends React.Component {
 
 	constructor() {
 		super();
 
-		this.saveTask = this.saveTask.bind(this);
+		// this.saveTask = this.saveTask.bind(this);
 		this.buildTaskItem = this.buildTaskItem.bind(this);
 		this.removeTask = this.removeTask.bind(this);
+		this._onChange = this._onChange.bind(this);
 
 		this.state = {
 			tasks: {}
 		};
 	}
 
+	// Life Cycle - Register for events
+	componentDidMount() {
+		TodoStore.addChangeListener(this._onChange);
+	}
+	componentWillUnmount() {
+		TodoStore.removeChangeListener(this._onChange);
+	}
+
 	buildTaskItem (key) { 
 		const task = this.state.tasks[key];
-
 		return (<TodoItem key={task.id} id={task.id} itemName={task.name} removeTask={this.removeTask} />);
 	}
 
-	saveTask(task) {
-		const tasks = {...this.state.tasks};
-		const timestamp = Date.now();
-		tasks['task-'+ timestamp] = {
-			id: timestamp,
-			name: task
-		};
-		this.setState({tasks});
-	}
+	// saveTask(task) {
+	// 	const tasks = {...this.state.tasks};
+	// 	const timestamp = Date.now();
+	// 	tasks['task-'+ timestamp] = {
+	// 		id: timestamp,
+	// 		name: task
+	// 	};
+	// 	this.setState({tasks});
+	// }
 
 	removeTask(taskId) {
 		const tasks = {...this.state.tasks};
@@ -50,10 +61,15 @@ class TaskList extends React.Component {
 				<ul>
 					{tasks}
 				</ul>
-				<AddTaskForm saveTask={this.saveTask} />
+				<AddTaskForm />
 			</div>
 		)
 	}
+
+	_onChange() {
+		this.setState({tasks: getTodosFromStore()});
+	}
+
 }
 
 export default TaskList;
