@@ -13,6 +13,7 @@ function _generateTodo(text) {
 	return {
 		id: Counter.increment(),
 		created: Date.now(),
+		completed: false,
 		name: text
 	};
 }
@@ -27,8 +28,11 @@ class TodoStore extends EventEmitter {
 		this.dispatchToken = null; // nonexistant yet
 	}
 
+	// ---------------------------------------
+	//        Begin constraint violations
+
 	// Set dispatchtoken
-	setDispatchToken(token){
+	setDispatchToken(token) {
 		this.dispatchToken = token;
 	}
 	// Another violation of constraint
@@ -38,6 +42,12 @@ class TodoStore extends EventEmitter {
 	_deleteTodo(id) {
 		delete this._todos[id];
 	}
+	_completeTodo(id) {
+		this._todos[id].completed = true;
+	}
+
+	//        End constraint violations
+	// ---------------------------------------
 
 	// Event listeners
 	addChangeListener(callback) {
@@ -83,8 +93,13 @@ var dtoken = Dispatcher.register((payload) => {
 		break;
 		case ActionTypes.DELETE_TODO:
 			// yet another thing
-			const todo_id = action.data;
+			var todo_id = action.data;
 			todoStore._deleteTodo(todo_id);
+			todoStore.emitChange();
+		break;
+		case ActionTypes.COMPLETE_TODO:
+			var todo_id = action.data;
+			todoStore._completeTodo(todo_id);
 			todoStore.emitChange();
 		break;
 		default:

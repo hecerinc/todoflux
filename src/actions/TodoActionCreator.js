@@ -23,6 +23,12 @@ export default {
 			type: ActionTypes.DELETE_TODO,
 			data: payload
 		});
+	},
+	completeTodo: function(payload) {
+		Dispatcher.handleViewAction({
+			type: ActionTypes.COMPLETE_TODO,
+			data: payload
+		});
 	}
 };
 

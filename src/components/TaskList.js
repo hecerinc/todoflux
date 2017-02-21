@@ -39,6 +39,11 @@ class TaskList extends React.Component {
 		return (
 			<div className="task-list">
 				<p>My TaskList</p>
+				<ul className="inline">
+					<li><a href="#">All</a></li>
+					<li><a href="#">Active</a></li>
+					<li><a href="#">Completed</a></li>
+				</ul>
 				<ul>
 					{tasks}
 				</ul>
