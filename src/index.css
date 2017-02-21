@@ -36,13 +36,22 @@ a {
 	margin-right: 10px;
 	font-size: 12px;
 }
+.todo-item{
+	margin-bottom: 2px;
+}
+.todo-item.completed {
+	opacity: .4;
+	text-decoration: line-through;
+}
+.todo-item.completed .remove-btn {
+	display: none;
+}
 .task-list ul.inline a {
 	text-decoration: underline dotted;
 }
 .task-list input[type="checkbox"] {
 	margin-right: 10px;
 }
-
 .remove-btn{
 	float: right;
 }
