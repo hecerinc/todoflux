@@ -1,8 +1,6 @@
 // Todo Action Creator.js
 
 
-// dunno what this will do
-
 import Dispatcher from '../Dispatcher';
 import Constants from '../Constants';
 const ActionTypes = Constants.ActionTypes;

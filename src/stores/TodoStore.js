@@ -18,36 +18,50 @@ function _generateTodo(text) {
 	};
 }
 
-// Leave pending to transform to ES6
 class TodoStore extends EventEmitter {
 
-	constructor() {
+	constructor(dispatcher) {
 		super();
+
 		// Data in memory
-		this._todos = {};
-		this.dispatchToken = null; // nonexistant yet
+		// getInitialState()
+		this._todos = {}; 
+
+		this._dispatcher = dispatcher;
+
+		// Register with dispatcher 
+		this.dispatchToken = this._dispatcher.register(this._eventHandler.bind(this));
 	}
 
-	// ---------------------------------------
-	//        Begin constraint violations
-
-	// Set dispatchtoken
-	setDispatchToken(token) {
-		this.dispatchToken = token;
+	_eventHandler(payload) {
+		const action = payload.action;
+		switch(action.type){
+			case ActionTypes.ADD_TODO:
+				const msg = _generateTodo(action.data);
+				this._todos[msg.id] = msg;
+				this.emitChange();
+			break;
+			case ActionTypes.EDIT_TODO:
+				// do something else
+				// TODO: implement this method
+				this.emitChange();
+			break;
+			case ActionTypes.DELETE_TODO: { // scoped to make todo_id local to the case
+				let todo_id = action.data;
+				delete this._todos[todo_id];
+				this.emitChange();
+			}
+			break;
+			case ActionTypes.TOGGLE_TODO: { // these are scoped so that todo_id is local
+				let todo_id = action.data;
+				this._todos[todo_id].completed = !this._todos[todo_id].completed;
+				this.emitChange();
+			}
+			break;
+			default:
+				// do nothing
+		}
 	}
-	// Another violation of constraint
-	_addTodo(todo) {
-		this._todos[todo.id] = todo;
-	}
-	_deleteTodo(id) {
-		delete this._todos[id];
-	}
-	_toggleTodo(id) {
-		this._todos[id].completed = !this._todos[id].completed;
-	}
-
-	//        End constraint violations
-	// ---------------------------------------
 
 	// Event listeners
 	addChangeListener(callback) {
@@ -73,41 +87,8 @@ class TodoStore extends EventEmitter {
 }
 
 
-// New instance
+// Improvement: 
+//	If you pass the dispatcher to the constructor, you can do **BOTH** these steps 
+// 	at the same time, inside the class
 
-const todoStore = new TodoStore();
-
-// Register callbacks with dispatcher
-var dtoken = Dispatcher.register((payload) => {
-	const action = payload.action;
-	switch(action.type){
-		case ActionTypes.ADD_TODO:
-			// do something
-			const msg = _generateTodo(action.data);
-			todoStore._addTodo(msg);
-			todoStore.emitChange();
-		break;
-		case ActionTypes.EDIT_TODO:
-			// do something else
-			todoStore.emitChange();
-		break;
-		case ActionTypes.DELETE_TODO:
-			// yet another thing
-			var todo_id = action.data;
-			todoStore._deleteTodo(todo_id);
-			todoStore.emitChange();
-		break;
-		case ActionTypes.TOGGLE_TODO:
-			var todo_id = action.data;
-			todoStore._toggleTodo(todo_id);
-			todoStore.emitChange();
-		break;
-		default:
-			// do nothing
-	}
-});
-
-// Save dispatch token !! This violates constraint !!
-todoStore.setDispatchToken(dtoken);
-
-export default todoStore;
+export default new TodoStore(Dispatcher);
