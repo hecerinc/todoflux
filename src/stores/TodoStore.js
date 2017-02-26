@@ -86,9 +86,4 @@ class TodoStore extends EventEmitter {
 	}
 }
 
-
-// Improvement: 
-//	If you pass the dispatcher to the constructor, you can do **BOTH** these steps 
-// 	at the same time, inside the class
-
 export default new TodoStore(Dispatcher);
